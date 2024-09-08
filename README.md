@@ -53,7 +53,7 @@ The following dependencies are required for the package to work:
 These dependencies will be automatically installed when you run the `pip install` command.
 
 ## Usage
-###1. Preprocessing the data
+1.Preprocessing the data
 ```python
 from credit_risk_detection import preprocess_data
 
@@ -64,8 +64,9 @@ data = pd.read_csv("credit_card_data.csv")
 X_train, X_test, y_train, y_test = preprocess_data(data, target_column='default')
 ```
 
-###2. Model training and evaluation
-####AdaBoost
+2.Model training and evaluation
+
+AdaBoost
 ```python
 from credit_risk_detection import AdaBoostModel
 
@@ -77,7 +78,7 @@ from credit_risk_detection import evaluate_model_classification
 evaluate_model_classification(y_test, preds)
 ```
 
-####CatBoost
+CatBoost
 ```python
 from credit_risk_detection import CatBoostModel
 
@@ -88,8 +89,9 @@ preds, clf = CatBoostModel(X_train, X_test, predictors, target='default')
 evaluate_model_classification(y_test, preds)
 ```
 
-###3.Visualizing model performance
-####ROC Curve
+3.Visualizing model performance
+
+ROC Curve
 ```python
 from credit_risk_detection import CatBoostModel
 
@@ -100,7 +102,7 @@ preds, clf = CatBoostModel(X_train, X_test, predictors, target='default')
 evaluate_model_classification(y_test, preds)
 ```
 
-####Confusion Matrix
+Confusion Matrix
 ```python
 from credit_risk_detection import CatBoostModel
 
@@ -118,7 +120,7 @@ Jiangao Han
 ##Acknowledgements
 Special thanks to the open-source community and libraries that made this project possible.
 
-###Explanation:
+##Explanation:
 
 - **Title and Description**: A short introduction to the project, explaining its purpose and functionality.
 - **Features**: A list of the key features the package offers.
@@ -129,5 +131,3 @@ Special thanks to the open-source community and libraries that made this project
 - **Contributing**: A section encouraging contributions from other developers.
 - **Authors**: Listing the main contributors/authors of the project.
 - **Acknowledgments**: A section to thank contributors or resources that helped with the project.
-
-Feel free to customize any part of this `README.md` to better fit your project. Let me know if you need further adjustments!
