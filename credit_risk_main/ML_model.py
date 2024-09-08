@@ -21,28 +21,24 @@ def model_gs(train_df, val_df, predictors, target, model_name):
     X_val = val_df[predictors]
     y_val = val_df[target].values
     
-    # 需要标准化的模型
     models_needing_scaling = ['LR', 'SVC']
     
-    # 对于 Logistic Regression 和 SVC 进行标准化
     if model_name in models_needing_scaling:
         scaler = StandardScaler()
         X_train = scaler.fit_transform(X_train)
         X_val = scaler.transform(X_val)
 
     if model_name == 'LR':
-        # Logistic Regression
         LR_param = {
             'penalty': ['l1', 'l2'],
             'C': [0.001, 0.01, 0.1, 1, 10],
-            'solver': ['liblinear'],  # 适用于 l1 和 l2 的 solver
-            'max_iter': [1000]  # 增加最大迭代次数
+            'solver': ['liblinear'],
+            'max_iter': [1000]
         }
         model = LogisticRegression()
         param_grid = LR_param
         
     elif model_name == 'KNN':
-        # KNN
         KNN_param = {
             'n_neighbors': list(range(2, 5, 1)),
             'algorithm': ['auto', 'ball_tree', 'kd_tree', 'brute']
@@ -51,16 +47,14 @@ def model_gs(train_df, val_df, predictors, target, model_name):
         param_grid = KNN_param
         
     elif model_name == 'SVC':
-        # SVC
         SVC_param = {
             'C': [0.5, 0.7, 0.9, 1],
             'kernel': ['rbf', 'poly', 'sigmoid', 'linear']
         }
-        model = SVC(probability=True)  # 为了获得预测概率，设置 probability=True
+        model = SVC(probability=True)
         param_grid = SVC_param
         
     elif model_name == 'DT':
-        # Decision Tree
         DT_param = {
             'criterion': ['gini', 'entropy'],
             'max_depth': list(range(2, 5, 1)),
@@ -70,7 +64,6 @@ def model_gs(train_df, val_df, predictors, target, model_name):
         param_grid = DT_param
         
     elif model_name == 'RFC':
-        # Random Forest Classifier
         RFC_param = {
             'n_estimators': [100, 150, 200],
             'criterion': ['gini', 'entropy'],
@@ -80,10 +73,10 @@ def model_gs(train_df, val_df, predictors, target, model_name):
         param_grid = RFC_param
         
     elif model_name == 'SGD':
-        # Stochastic Gradient Descent
         SGD_param = {
             'penalty': ['l2', 'l1'],
-            'max_iter': [1000, 1500, 2000]
+            'max_iter': [1000, 1500, 2000],
+            'loss': ['log_loss', 'modified_huber']  # 支持 predict_proba 的损失函数
         }
         model = SGDClassifier()
         param_grid = SGD_param
@@ -91,26 +84,27 @@ def model_gs(train_df, val_df, predictors, target, model_name):
     else:
         raise ValueError("Model not recognized. Please select from 'LR', 'KNN', 'SVC', 'DT', 'RFC', 'SGD'.")
 
-    # Apply GridSearchCV to find the best parameters, using roc_auc as scoring metric
     gs = GridSearchCV(model, param_grid=param_grid, n_jobs=-1, scoring='roc_auc')
     gs.fit(X_train, y_train)
 
-    best_estimator = gs.best_estimator_  # Best estimator after grid search
+    best_estimator = gs.best_estimator_
     
-    # Make predictions on the validation set (predict probabilities for ROC-AUC)
-    val_preds_proba = best_estimator.predict_proba(X_val)[:, 1]
-    
-    # Evaluate ROC-AUC on the validation set
+    # 使用 predict_proba 或 decision_function
+    try:
+        val_preds_proba = best_estimator.predict_proba(X_val)[:, 1]
+    except AttributeError:
+        val_preds_proba = best_estimator.decision_function(X_val)
+
     val_roc_auc = roc_auc_score(y_val, val_preds_proba)
     
-    print(f"Best parameters for {model_name}: {gs.best_params_}")
-    print(f"Validation ROC-AUC for {model_name}: {val_roc_auc:.4f}")
+    # print(f"Best parameters for {model_name}: {gs.best_params_}")
+    # print(f"Validation ROC-AUC for {model_name}: {val_roc_auc:.4f}")
     
     return best_estimator, val_preds_proba
 
 # 运行所有模型
 def run_all_models(train_df, val_df, predictors, target):
-    models = ['LR', 'KNN', 'SVC', 'DT', 'RFC', 'SGD']
+    models = ['LR', 'KNN', 'DT', 'RFC', 'SGD']
     results = {}
     
     for model_name in models:

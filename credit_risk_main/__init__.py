@@ -9,6 +9,11 @@ from .virtualization import plot_feature_distribution, plot_correlation_heatmap,
 # 从 evaluation 模块导入
 from .evaluation import evaluate_model_classification, plot_confusion_matrix, classification_report
 
+# 从 ML 模块导入
+from .ML_model import model_gs, run_all_models
+
+# 从 boost_model 模块导入
+from .ML_model import AdaBoostModel, CatBoostModel, XGBoostModel, LightGBMModel
 # 定义 __all__ 使包导入更清晰
 __all__ = [
     # preprocess.py
@@ -32,5 +37,15 @@ __all__ = [
     
     # evaluation.py
     'evaluate_model_classification',
-    'classification_report'
+    'classification_report',
+    
+    # ML.model.py
+    'model_gs',
+    'run_all_models'
+
+    # boost_model.py
+    'AdaBoostModel',
+    'CatBoostModel',
+    'XGBoostModel',
+    'LightGBMModel'
 ]
