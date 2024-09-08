@@ -2,7 +2,7 @@ import unittest
 import pandas as pd
 from sklearn.datasets import make_classification
 from sklearn.metrics import roc_auc_score
-from sklearn.metrics import model_gs, run_all_models
+from credit_risk_detection import model_gs, run_all_models
 
 class TestModelFunctions(unittest.TestCase):
 

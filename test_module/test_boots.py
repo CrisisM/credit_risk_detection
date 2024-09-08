@@ -6,7 +6,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score
 
 # 从你的包中导入模型函数
-from credit_risk_detection.credit_risk_main import AdaBoostModel, CatBoostModel, XGBoostModel, LightGBMModel
+from credit_risk_detection.boost_model import AdaBoostModel, CatBoostModel, XGBoostModel, LightGBMModel
 
 # 创建模拟数据
 def create_mock_data():
@@ -26,10 +26,11 @@ target = 'target'
 train_df, val_df = train_test_split(df, test_size=0.2, random_state=2024)
 
 # 测试 AdaBoostModel
-def test_adaboost():
-    preds, clf = AdaBoostModel(train_df, val_df, predictors, target)
+def test_adaboost():   
+    preds, clf= AdaBoostModel(train_df, val_df, predictors, target)
     accuracy = accuracy_score(val_df[target], preds)
     print("AdaBoost Accuracy:", accuracy)
+
 
 # 测试 CatBoostModel
 def test_catboost():
@@ -39,20 +40,25 @@ def test_catboost():
 
 # 测试 XGBoostModel
 def test_xgboost():
-    model = XGBoostModel(train_df, val_df, predictors, target)
-    # XGBoost 返回的是模型，不直接返回预测结果
-    dvalid = xgb.DMatrix(val_df[predictors])
-    preds = model.predict(dvalid)
-    accuracy = accuracy_score(val_df[target], preds)
+    preds, model, model_params = XGBoostModel(train_df, val_df, predictors, target)  # 直接获得模型、预测值和参数
+    accuracy = accuracy_score(val_df[target], np.round(preds))  # 将预测结果四舍五入到最近的整数（0 或 1）
     print("XGBoost Accuracy:", accuracy)
+    print("Model Parameters:", model_params)
 
 # 测试 LightGBMModel
 def test_lightgbm():
-    params = {'objective': 'binary', 'metric': 'binary_logloss'}
-    model, final_auc_train, final_auc_valid = LightGBMModel(
-        train_df, val_df, predictors, target, categorical_features=[], params=params)
-    print("LightGBM Final AUC Train:", final_auc_train)
-    print("LightGBM Final AUC Valid:", final_auc_valid)
+    preds, model, model_params = LightGBMModel(train_df, val_df, predictors, target)  # 获取模型和评估结果
+    
+    # 预测验证集
+    preds = model.predict(val_df[predictors])
+    
+    # 将连续的概率值转换为二进制分类标签
+    binary_preds = [1 if prob >= 0.5 else 0 for prob in preds]
+    
+    # 计算准确率
+    accuracy = accuracy_score(val_df[target], binary_preds)
+    print("LightGBM Accuracy:", accuracy)
+
 
 # 运行测试
 if __name__ == "__main__":
