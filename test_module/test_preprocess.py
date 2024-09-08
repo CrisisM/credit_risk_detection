@@ -1,6 +1,8 @@
 import unittest
 import pandas as pd
 import numpy as np
+from collections import Counter
+
 from credit_risk_detection.preprocess import (
     preprocess_data, separate_features_and_target, preprocess_numeric_features,
     preprocess_categorical_features, build_preprocessor, apply_preprocessor,

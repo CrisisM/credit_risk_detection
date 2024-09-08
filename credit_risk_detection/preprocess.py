@@ -5,6 +5,7 @@ from sklearn.impute import SimpleImputer
 from sklearn.compose import ColumnTransformer
 from sklearn.pipeline import Pipeline
 from collections import Counter
+from imblearn.over_sampling import SMOTE
 
 def preprocess_data(data, target_column, test_size=0.3, imbalance_threshold=0.1):
     """
@@ -187,7 +188,8 @@ def smote_oversample(X, y):
     - X_resampled: SMOTE后的特征数据
     - y_resampled: SMOTE后的标签数据
     """
-    smote = SMOTE(random_state=42)
+    # 修改 n_neighbors 参数为较小值以适应较少样本
+    smote = SMOTE(random_state=42, k_neighbors=min(1, len(X[y == 1]) - 1))  # 避免 n_neighbors > 少数类样本数量
     X_resampled, y_resampled = smote.fit_resample(X, y)
     
     print(f"SMOTE Oversample - Class distribution: {Counter(y_resampled)}")
