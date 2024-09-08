@@ -4,15 +4,15 @@ import seaborn as sns
 
 def evaluate_model_classification(y_true, y_pred, y_prob=None):
     """
-    评估分类模型的主要指标，包括准确率、精确率、召回率、F1 分数和AUC-ROC。
+    Evaluate the main metrics for a classification model, including accuracy, precision, recall, F1 score, and AUC-ROC.
     
-    参数:
-    - y_true: 实际标签
-    - y_pred: 模型预测的标签
-    - y_prob: 模型预测的正类概率（用于计算AUC）
+    Parameters:
+    - y_true: Actual labels
+    - y_pred: Predicted labels from the model
+    - y_prob: Predicted probabilities for the positive class (used for AUC calculation)
     
-    返回:
-    - 一个包含主要评估指标的字典
+    Returns:
+    - A dictionary containing the main evaluation metrics
     """
     metrics = {
         'Accuracy': accuracy_score(y_true, y_pred),
@@ -32,12 +32,12 @@ def evaluate_model_classification(y_true, y_pred, y_prob=None):
 
 def plot_confusion_matrix(y_true, y_pred, labels=None):
     """
-    绘制分类模型的混淆矩阵。
+    Plot the confusion matrix for a classification model.
     
-    参数:
-    - y_true: 实际标签
-    - y_pred: 模型预测的标签
-    - labels: 类别标签（可选）
+    Parameters:
+    - y_true: Actual labels
+    - y_pred: Predicted labels from the model
+    - labels: Class labels (optional)
     """
     cm = confusion_matrix(y_true, y_pred, labels=labels)
     plt.figure(figsize=(6, 4))
@@ -49,14 +49,14 @@ def plot_confusion_matrix(y_true, y_pred, labels=None):
 
 def classification_report(y_true, y_pred):
     """
-    生成分类模型的精确率、召回率、F1 分数报告。
+    Generate a classification report showing precision, recall, and F1 score.
     
-    参数:
-    - y_true: 实际标签
-    - y_pred: 模型预测的标签
+    Parameters:
+    - y_true: Actual labels
+    - y_pred: Predicted labels from the model
     
-    返回:
-    - 字符串格式的分类报告
+    Returns:
+    - A string-format classification report
     """
     report = cr(y_true, y_pred)
     print("Classification Report:")

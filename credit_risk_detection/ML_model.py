@@ -7,14 +7,15 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import roc_auc_score
 from sklearn.preprocessing import StandardScaler
 
-'LogisticRegression' # 逻辑回归
-"SVC" # 支撑向量机
-"KNN" # K近邻
-'DT'# 决策树
-'RFC' # 随机森林
-'Bagging'# 集成学习bagging
-'SGD' # 随机梯度
-'GBC'# 集成学习Gradient
+'LogisticRegression'  # Logistic Regression
+"SVC"  # Support Vector Machine
+"KNN"  # K-Nearest Neighbors
+'DT'  # Decision Tree
+'RFC'  # Random Forest
+'Bagging'  # Bagging ensemble learning
+'SGD'  # Stochastic Gradient Descent
+'GBC'  # Gradient Boosting (ensemble learning)
+
 def model_gs(train_df, val_df, predictors, target, model_name):
     X_train = train_df[predictors]
     y_train = train_df[target].values
@@ -76,7 +77,7 @@ def model_gs(train_df, val_df, predictors, target, model_name):
         SGD_param = {
             'penalty': ['l2', 'l1'],
             'max_iter': [1000, 1500, 2000],
-            'loss': ['log_loss', 'modified_huber']  # 支持 predict_proba 的损失函数
+            'loss': ['log_loss', 'modified_huber']  # Loss functions that support predict_proba
         }
         model = SGDClassifier()
         param_grid = SGD_param
@@ -89,7 +90,7 @@ def model_gs(train_df, val_df, predictors, target, model_name):
 
     best_estimator = gs.best_estimator_
     
-    # 使用 predict_proba 或 decision_function
+    # Use predict_proba or decision_function
     try:
         val_preds_proba = best_estimator.predict_proba(X_val)[:, 1]
     except AttributeError:
@@ -97,12 +98,9 @@ def model_gs(train_df, val_df, predictors, target, model_name):
 
     val_roc_auc = roc_auc_score(y_val, val_preds_proba)
     
-    # print(f"Best parameters for {model_name}: {gs.best_params_}")
-    # print(f"Validation ROC-AUC for {model_name}: {val_roc_auc:.4f}")
-    
     return best_estimator, val_preds_proba
 
-# 运行所有模型
+# Run all models
 def run_all_models(train_df, val_df, predictors, target):
     models = ['LR', 'KNN', 'DT', 'RFC', 'SGD']
     results = {}
@@ -114,5 +112,5 @@ def run_all_models(train_df, val_df, predictors, target):
         
     return results
 
-# 调用时使用
+# Example usage
 # results = run_all_models(train_df, val_df, predictors, target)

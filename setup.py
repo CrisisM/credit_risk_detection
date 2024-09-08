@@ -1,18 +1,18 @@
 from setuptools import setup, find_packages
 
-# 读取 README.md 文件中的内容作为项目的详细描述
+# Read the content of README.md as the detailed description of the project
 with open("README.md", "r", encoding="utf-8") as fh:
     long_description = fh.read()
 
 setup(
-    name='credit_risk_detection',  # 包的名字
-    version='0.1.0',  # 版本号
+    name='credit_risk_detection',  # The name of the package
+    version='0.1.0',  # Version number
     description='A package for credit card default risk analysis',
-    long_description=long_description,  # 详细描述
-    long_description_content_type='text/markdown',  # 指定README的格式
+    long_description=long_description,  # Detailed description
+    long_description_content_type='text/markdown',  # Specify the format of README
     author='Wenbo_Liu & Jiangao_Han',
     author_email='wbliu0528@gmail.com',
-    packages=find_packages(),  # 自动找到 package（默认当前目录及其子目录）
+    packages=find_packages(),  # Automatically find packages (by default, the current directory and its subdirectories)
     install_requires=[
         'numpy',
         'pandas',
@@ -21,10 +21,10 @@ setup(
         'seaborn',
         'imbalanced-learn'
     ],
-    python_requires='>=3.6',  # Python 版本要求
-    classifiers=[  # 包的分类信息
+    python_requires='>=3.6',  # Python version requirement
+    classifiers=[  # Classification information of the package
         "Programming Language :: Python :: 3",
-        "License :: OSI Approved :: MIT License",  # 使用 MIT License
+        "License :: OSI Approved :: MIT License",  # Using MIT License
         "Operating System :: OS Independent",
     ],
 )

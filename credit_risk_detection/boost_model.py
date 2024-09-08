@@ -1,4 +1,3 @@
-# %%
 import numpy as np
 import pandas as pd
 
@@ -6,36 +5,36 @@ from sklearn.ensemble import AdaBoostClassifier
 
 def AdaBoostModel(train_df, val_df, predictors, target, random_state=2024, algorithm='SAMME.R', learning_rate=0.8, n_estimators=100):
     """
-    封装的 AdaBoost 分类器训练和预测函数。
+    A wrapped function for training and predicting using AdaBoost classifier.
 
-    参数:
-    - train_df: 训练数据集的 DataFrame。
-    - val_df: 验证数据集的 DataFrame。
-    - predictors: 特征列的名称列表。
-    - target: 目标列的名称。
-    - random_state: 随机数种子，确保结果的可重复性。
-    - algorithm: 使用的算法类型，'SAMME' 或 'SAMME.R'（默认是 'SAMME.R'）。
-    - learning_rate: 每棵树对总结果的贡献程度。
-    - n_estimators: 基础学习器（通常是决策树）的数量。
+    Parameters:
+    - train_df: The training dataset as a DataFrame.
+    - val_df: The validation dataset as a DataFrame.
+    - predictors: List of feature column names.
+    - target: Name of the target column.
+    - random_state: Seed for randomness to ensure reproducibility.
+    - algorithm: Algorithm type, 'SAMME' or 'SAMME.R' (default is 'SAMME.R').
+    - learning_rate: Contribution of each tree to the final result.
+    - n_estimators: Number of base learners (usually decision trees).
 
-    返回:
-    - preds: 验证集上的预测结果。
-    - clf: 训练好的 AdaBoost 模型。
+    Returns:
+    - preds: Prediction results on the validation set.
+    - clf: The trained AdaBoost model.
     """
     
-    # 初始化 AdaBoost 模型
+    # Initialize the AdaBoost model
     clf = AdaBoostClassifier(random_state=random_state,
                              algorithm=algorithm,
                              learning_rate=learning_rate,
                              n_estimators=n_estimators)
     
-    # 训练模型
+    # Train the model
     clf.fit(train_df[predictors], train_df[target].values)
     
-    # 在验证集上进行预测
+    # Predict on the validation set
     preds = clf.predict(val_df[predictors])
     
-    return preds, clf  # 确保返回两个值
+    return preds, clf  # Ensure both values are returned
 
 
 # %%
@@ -44,30 +43,30 @@ from catboost import CatBoostClassifier
 def CatBoostModel(train_df, val_df, predictors, target, iterations=500, learning_rate=0.02, depth=12, eval_metric='AUC',
                   random_seed=2024, bagging_temperature=0.2, od_type='Iter', metric_period=50, od_wait=100, verbose=True):
     """
-    封装的 CatBoost 分类器训练和预测函数。
+    A wrapped function for training and predicting using CatBoost classifier.
 
-    参数:
-    - train_df: 训练数据集的 DataFrame。
-    - val_df: 验证数据集的 DataFrame。
-    - predictors: 特征列的名称列表。
-    - target: 目标列的名称。
-    - iterations: 训练迭代次数（决策树的数量）。
-    - learning_rate: 学习率。
-    - depth: 每棵决策树的最大深度。
-    - eval_metric: 评估指标，默认是 'AUC'。
-    - random_seed: 随机数种子，确保结果的可重复性。
-    - bagging_temperature: 控制子采样的多样性。
-    - od_type: 过拟合检测的类型，默认是 'Iter'。
-    - metric_period: 评估指标输出的频率。
-    - od_wait: 早停等待的轮数。
-    - verbose: 控制训练过程中的详细输出。
+    Parameters:
+    - train_df: The training dataset as a DataFrame.
+    - val_df: The validation dataset as a DataFrame.
+    - predictors: List of feature column names.
+    - target: Name of the target column.
+    - iterations: Number of training iterations (number of decision trees).
+    - learning_rate: Learning rate.
+    - depth: Maximum depth of each decision tree.
+    - eval_metric: Evaluation metric, default is 'AUC'.
+    - random_seed: Seed for randomness to ensure reproducibility.
+    - bagging_temperature: Controls the diversity of subsamples.
+    - od_type: Type of overfitting detection, default is 'Iter'.
+    - metric_period: Frequency of metric output.
+    - od_wait: Number of iterations to wait before stopping for overfitting.
+    - verbose: Controls the verbosity of the training process.
 
-    返回:
-    - preds: 验证集上的预测结果。
-    - clf: 训练好的 CatBoost 模型。
+    Returns:
+    - preds: Prediction results on the validation set.
+    - clf: The trained CatBoost model.
     """
     
-    # 初始化 CatBoost 模型
+    # Initialize the CatBoost model
     clf = CatBoostClassifier(iterations=iterations,
                              learning_rate=learning_rate,
                              depth=depth,
@@ -78,99 +77,10 @@ def CatBoostModel(train_df, val_df, predictors, target, iterations=500, learning
                              metric_period=metric_period,
                              od_wait=od_wait)
     
-    # 训练模型
+    # Train the model
     clf.fit(train_df[predictors], train_df[target].values, verbose=verbose)
     
-    # 在验证集上进行预测
-    preds = clf.predict(val_df[predictors])
-    
-    # 确保返回预测结果和模型
-    return preds, clf
-
-
-# %%
-import xgboost as xgb
-
-def AdaBoostModel(train_df, val_df, predictors, target, random_state=2024, algorithm='SAMME.R', learning_rate=0.8, n_estimators=100):
-    """
-    封装的 AdaBoost 分类器训练和预测函数。
-
-    参数:
-    - train_df: 训练数据集的 DataFrame。
-    - val_df: 验证数据集的 DataFrame。
-    - predictors: 特征列的名称列表。
-    - target: 目标列的名称。
-    - random_state: 随机数种子，确保结果的可重复性。
-    - algorithm: 使用的算法类型，'SAMME' 或 'SAMME.R'（默认是 'SAMME.R'）。
-    - learning_rate: 每棵树对总结果的贡献程度。
-    - n_estimators: 基础学习器（通常是决策树）的数量。
-
-    返回:
-    - preds: 验证集上的预测结果。
-    - clf: 训练好的 AdaBoost 模型。
-    - model_params: 模型的参数字典。
-    """
-    
-    # 初始化 AdaBoost 模型
-    clf = AdaBoostClassifier(random_state=random_state,
-                             algorithm=algorithm,
-                             learning_rate=learning_rate,
-                             n_estimators=n_estimators)
-    
-    # 训练模型
-    clf.fit(train_df[predictors], train_df[target].values)
-    
-    # 在验证集上进行预测
-    preds = clf.predict(val_df[predictors])
-    
-    return preds, clf
-
-
-# %%
-from catboost import CatBoostClassifier
-
-def CatBoostModel(train_df, val_df, predictors, target, iterations=500, learning_rate=0.02, depth=12, eval_metric='AUC',
-                  random_seed=2024, bagging_temperature=0.2, od_type='Iter', metric_period=50, od_wait=100, verbose=True):
-    """
-    封装的 CatBoost 分类器训练和预测函数。
-
-    参数:
-    - train_df: 训练数据集的 DataFrame。
-    - val_df: 验证数据集的 DataFrame。
-    - predictors: 特征列的名称列表。
-    - target: 目标列的名称。
-    - iterations: 训练迭代次数（决策树的数量）。
-    - learning_rate: 学习率。
-    - depth: 每棵决策树的最大深度。
-    - eval_metric: 评估指标，默认是 'AUC'。
-    - random_seed: 随机数种子，确保结果的可重复性。
-    - bagging_temperature: 控制子采样的多样性。
-    - od_type: 过拟合检测的类型，默认是 'Iter'。
-    - metric_period: 评估指标输出的频率。
-    - od_wait: 早停等待的轮数。
-    - verbose: 控制训练过程中的详细输出。
-
-    返回:
-    - preds: 验证集上的预测结果。
-    - clf: 训练好的 CatBoost 模型。
-    - model_params: 模型的参数字典。
-    """
-    
-    # 初始化 CatBoost 模型
-    clf = CatBoostClassifier(iterations=iterations,
-                             learning_rate=learning_rate,
-                             depth=depth,
-                             eval_metric=eval_metric,
-                             random_seed=random_seed,
-                             bagging_temperature=bagging_temperature,
-                             od_type=od_type,
-                             metric_period=metric_period,
-                             od_wait=od_wait)
-    
-    # 训练模型
-    clf.fit(train_df[predictors], train_df[target].values, verbose=verbose)
-    
-    # 在验证集上进行预测
+    # Predict on the validation set
     preds = clf.predict(val_df[predictors])
     
     return preds, clf
@@ -182,41 +92,41 @@ import xgboost as xgb
 def XGBoostModel(train_df, val_df, predictors, target, num_boost_round=500, early_stopping_rounds=50, verbose_eval=100,
                  eta=0.039, max_depth=3, subsample=0.8, colsample_bytree=0.9, eval_metric='auc', random_state=2024):
     """
-    封装的 XGBoost 分类器训练和预测函数。
+    A wrapped function for training and predicting using XGBoost classifier.
 
-    参数:
-    - train_df: 训练数据集的 DataFrame。
-    - val_df: 验证数据集的 DataFrame。
-    - predictors: 特征列的名称列表。
-    - target: 目标列的名称。
-    - num_boost_round: 训练的总轮数（Boosting 的轮数）。
-    - early_stopping_rounds: 早停的轮数，若在此轮数内模型性能未提升，则停止训练。
-    - verbose_eval: 控制训练过程中的详细输出频率。
-    - eta: 学习率，控制每棵树对最终结果的影响。
-    - max_depth: 每棵树的最大深度。
-    - subsample: 训练样本的子样本比例。
-    - colsample_bytree: 每棵树的特征子样本比例。
-    - eval_metric: 评估指标，通常为 'auc' 用于二分类任务。
-    - random_state: 随机数种子，确保结果的可重复性。
+    Parameters:
+    - train_df: The training dataset as a DataFrame.
+    - val_df: The validation dataset as a DataFrame.
+    - predictors: List of feature column names.
+    - target: Name of the target column.
+    - num_boost_round: Total number of boosting rounds.
+    - early_stopping_rounds: Number of rounds to wait before stopping early if no improvement.
+    - verbose_eval: Controls the frequency of output during training.
+    - eta: Learning rate, controls the impact of each tree on the final result.
+    - max_depth: Maximum depth of each tree.
+    - subsample: Proportion of training samples used for each tree.
+    - colsample_bytree: Proportion of features used for each tree.
+    - eval_metric: Evaluation metric, commonly 'auc' for binary classification tasks.
+    - random_state: Seed for randomness to ensure reproducibility.
 
-    返回:
-    - preds: 验证集上的预测结果。
-    - model: 训练好的 XGBoost 模型。
-    - model_params: 模型的参数字典。
+    Returns:
+    - preds: Prediction results on the validation set.
+    - model: The trained XGBoost model.
+    - model_params: Dictionary of the model's parameters.
     """
     
-    # 准备训练和验证数据集
+    # Prepare training and validation datasets
     dtrain = xgb.DMatrix(train_df[predictors], label=train_df[target].values)
     dvalid = xgb.DMatrix(val_df[predictors], label=val_df[target].values)
     
-    # 监控训练过程中的评估指标
+    # Monitor evaluation metrics during training
     watchlist = [(dtrain, 'train'), (dvalid, 'valid')]
     
-    # 设置 XGBoost 参数
+    # Set XGBoost parameters
     params = {
         'objective': 'binary:logistic',
         'eta': eta,
-        'verbosity': 1,  # 使用 verbosity 代替 silent
+        'verbosity': 1,  # Use verbosity instead of silent
         'max_depth': max_depth,
         'subsample': subsample,
         'colsample_bytree': colsample_bytree,
@@ -224,7 +134,7 @@ def XGBoostModel(train_df, val_df, predictors, target, num_boost_round=500, earl
         'random_state': random_state
     }
     
-    # 训练模型
+    # Train the model
     model = xgb.train(params, 
                       dtrain, 
                       num_boost_round=num_boost_round, 
@@ -233,13 +143,13 @@ def XGBoostModel(train_df, val_df, predictors, target, num_boost_round=500, earl
                       maximize=True if eval_metric == 'auc' else False, 
                       verbose_eval=verbose_eval)
     
-    # 检查是否有 best_ntree_limit 属性
+    # Check if the model has the best_ntree_limit attribute
     if hasattr(model, 'best_ntree_limit'):
         preds = model.predict(dvalid, ntree_limit=model.best_ntree_limit)
     else:
         preds = model.predict(dvalid)
     
-    # 模型参数
+    # Model parameters
     model_params = params.copy()
     model_params.update({
         'num_boost_round': num_boost_round,
@@ -256,31 +166,31 @@ import gc
 
 def LightGBMModel(train_df, val_df, predictors, target, categorical_features=None, params=None, num_boost_round=500, early_stopping_rounds=50, verbose_eval=100):
     """
-    封装的 LightGBM 分类器训练和预测函数。
+    A wrapped function for training and predicting using LightGBM classifier.
 
-    参数:
-    - train_df: 训练数据集的 DataFrame。
-    - val_df: 验证数据集的 DataFrame。
-    - predictors: 特征列的名称列表。
-    - target: 目标列的名称。
-    - categorical_features: 分类特征列的名称列表。
-    - params: LightGBM 模型的参数字典。
-    - num_boost_round: Boosting 的总轮数。
-    - early_stopping_rounds: 早停的轮数。
-    - verbose_eval: 控制训练过程中的详细输出频率。
+    Parameters:
+    - train_df: The training dataset as a DataFrame.
+    - val_df: The validation dataset as a DataFrame.
+    - predictors: List of feature column names.
+    - target: Name of the target column.
+    - categorical_features: List of categorical feature column names.
+    - params: Dictionary of LightGBM model parameters.
+    - num_boost_round: Total number of boosting rounds.
+    - early_stopping_rounds: Number of rounds to wait before early stopping.
+    - verbose_eval: Controls the frequency of output during training.
 
-    返回:
-    - preds: 验证集上的预测结果。
-    - model: 训练好的 LightGBM 模型。
-    - model_params: 模型的参数字典。
-    - final_auc_train: 最终训练集上的 AUC 值。
-    - final_auc_valid: 最终验证集上的 AUC 值。
+    Returns:
+    - preds: Prediction results on the validation set.
+    - model: The trained LightGBM model.
+    - model_params: Dictionary of the model's parameters.
+    - final_auc_train: Final AUC on the training set.
+    - final_auc_valid: Final AUC on the validation set.
     """
-    # 如果没有提供 params，使用默认参数
+    # If no params are provided, use default parameters
     if params is None:
         params = {
             'objective': 'binary',
-            'metric': 'binary_logloss',  # 也可以设置为 'auc'
+            'metric': 'binary_logloss',  # Can also be set to 'auc'
             'boosting_type': 'gbdt',
             'learning_rate': 0.05,
             'num_leaves': 31,
@@ -288,10 +198,10 @@ def LightGBMModel(train_df, val_df, predictors, target, categorical_features=Non
             'subsample': 0.8,
             'colsample_bytree': 0.9,
             'random_state': 2024,
-            'verbosity': -1  # 设置为 -1 以屏蔽警告
+            'verbosity': -1  # Set to -1 to suppress warnings
         }
     
-    # 准备训练和验证数据集
+    # Prepare training and validation datasets
     dtrain = lgb.Dataset(train_df[predictors].values, 
                          label=train_df[target].values,
                          feature_name=predictors,
@@ -302,10 +212,10 @@ def LightGBMModel(train_df, val_df, predictors, target, categorical_features=Non
                          feature_name=predictors,
                          categorical_feature=categorical_features)
     
-    # 定义评估结果字典
+    # Define a dictionary to store evaluation results
     evals_results = {}
     
-    # 定义回调函数
+    # Define callbacks
     from lightgbm import early_stopping, log_evaluation, record_evaluation
 
     callbacks = [
@@ -314,7 +224,7 @@ def LightGBMModel(train_df, val_df, predictors, target, categorical_features=Non
         record_evaluation(evals_results)
     ]
     
-    # 训练模型
+    # Train the model
     model = lgb.train(params, 
                       dtrain, 
                       valid_sets=[dtrain, dvalid], 
@@ -322,10 +232,10 @@ def LightGBMModel(train_df, val_df, predictors, target, categorical_features=Non
                       callbacks=callbacks, 
                       num_boost_round=num_boost_round)
     
-    # 进行预测
+    # Make predictions
     preds = model.predict(val_df[predictors].values)
     
-    # 模型参数
+    # Model parameters
     model_params = params.copy()
     model_params.update({
         'num_boost_round': num_boost_round,
@@ -333,11 +243,10 @@ def LightGBMModel(train_df, val_df, predictors, target, categorical_features=Non
         'verbose_eval': verbose_eval
     })
 
-
-    # 删除 dvalid 对象以释放内存
+    # Delete dvalid object to free memory
     del dvalid
 
-    # 进行垃圾回收以释放内存
+    # Perform garbage collection to free memory
     gc.collect()
 
     return preds, model, model_params

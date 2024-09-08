@@ -5,19 +5,19 @@ import numpy as np
 
 def plot_default_distribution(data, target_column, plot_type='bar'):
     """
-    显示非违约客户和违约客户的比例示意图。
+    Display a graph showing the proportion of non-default and default customers.
     
-    参数:
-    - data: 输入的 DataFrame 数据
-    - target_column: 目标列，表示违约与否的标签
-    - plot_type: 图表类型，可选 'bar'（默认）或 'pie'
+    Parameters:
+    - data: The input DataFrame
+    - target_column: The target column representing default status
+    - plot_type: The type of plot, can be 'bar' (default) or 'pie'
     """
-    # 统计违约与非违约客户的数量
+    # Count the number of default and non-default customers
     default_counts = data[target_column].value_counts()
     labels = default_counts.index.map({0: 'Non-default', 1: 'Default'})
     
     if plot_type == 'bar':
-        # 使用条形图显示比例
+        # Display the proportion using a bar chart
         plt.figure(figsize=(6, 4))
         sns.barplot(x=labels, y=default_counts, palette='Set2')
         plt.title('Default vs Non-default Distribution')
@@ -26,7 +26,7 @@ def plot_default_distribution(data, target_column, plot_type='bar'):
         plt.show()
     
     elif plot_type == 'pie':
-        # 使用饼图显示比例
+        # Display the proportion using a pie chart
         plt.figure(figsize=(6, 6))
         plt.pie(default_counts, labels=labels, autopct='%1.1f%%', colors=['#66c2a5', '#fc8d62'], startangle=90, wedgeprops={'edgecolor': 'black'})
         plt.title('Default vs Non-default Distribution')
@@ -37,17 +37,17 @@ def plot_default_distribution(data, target_column, plot_type='bar'):
 
 def plot_default_amount_distribution(data, amount_column, target_column, plot_type='hist', bins=None):
     """
-    显示违约客户和非违约客户的金额分布示意图，并允许用户选择区间（bins）。
+    Display a graph of the amount distribution for default and non-default customers, allowing the user to choose bins.
     
-    参数:
-    - data: 输入的 DataFrame 数据
-    - amount_column: 金额列的名称
-    - target_column: 目标列，表示违约与否
-    - plot_type: 图表类型，可选 'hist'（默认）或 'box'
-    - bins: 直方图的区间数（仅对 'hist' 图表有效）
+    Parameters:
+    - data: The input DataFrame
+    - amount_column: The name of the column representing amounts
+    - target_column: The target column representing default status
+    - plot_type: The type of plot, can be 'hist' (default) or 'box'
+    - bins: The number of bins for the histogram (only effective for 'hist')
     """
     if plot_type == 'hist':
-        # 使用直方图显示违约和非违约客户的金额分布
+        # Display the amount distribution for default and non-default customers using a histogram
         plt.figure(figsize=(10, 6))
         sns.histplot(data=data, x=amount_column, hue=target_column, kde=True, palette="Set2", multiple="stack", bins=bins)
         plt.title(f'{amount_column} Distribution for Default vs Non-default')
@@ -56,7 +56,7 @@ def plot_default_amount_distribution(data, amount_column, target_column, plot_ty
         plt.show()
     
     elif plot_type == 'box':
-        # 使用箱线图显示违约和非违约客户的金额分布
+        # Display the amount distribution for default and non-default customers using a boxplot
         plt.figure(figsize=(10, 6))
         sns.boxplot(x=target_column, y=amount_column, data=data, palette="Set2")
         plt.title(f'{amount_column} Distribution for Default vs Non-default')
@@ -68,15 +68,14 @@ def plot_default_amount_distribution(data, amount_column, target_column, plot_ty
     else:
         raise ValueError("Invalid plot_type. Choose 'hist' or 'box'.")
 
-
 def plot_feature_distribution(data, feature, target_column=None):
     """
-    绘制单个特征的分布，区分违约和未违约客户。
+    Plot the distribution of a single feature, distinguishing between default and non-default customers.
     
-    参数:
-    - data: 输入的 DataFrame 数据
-    - feature: 要展示的特征列名称
-    - target_column: 目标列，若提供则按目标列进行分类展示
+    Parameters:
+    - data: The input DataFrame
+    - feature: The name of the feature column to display
+    - target_column: The target column (optional) for distinguishing different groups
     """
     plt.figure(figsize=(10, 6))
     
@@ -92,11 +91,11 @@ def plot_feature_distribution(data, feature, target_column=None):
 
 def plot_correlation_heatmap(data, title='Correlation Matrix'):
     """
-    绘制特征相关性热图。
+    Plot a heatmap of feature correlations.
     
-    参数:
-    - data: 输入的 DataFrame 数据
-    - title: 图表标题
+    Parameters:
+    - data: The input DataFrame
+    - title: The title of the plot
     """
     plt.figure(figsize=(12, 8))
     corr = data.corr()
@@ -106,12 +105,12 @@ def plot_correlation_heatmap(data, title='Correlation Matrix'):
 
 def plot_confusion_matrix(y_true, y_pred, labels=None):
     """
-    绘制混淆矩阵，展示模型的预测结果。
+    Plot a confusion matrix showing the model's prediction results.
     
-    参数:
-    - y_true: 实际标签
-    - y_pred: 预测标签
-    - labels: 类别标签（可选）
+    Parameters:
+    - y_true: Actual labels
+    - y_pred: Predicted labels
+    - labels: Class labels (optional)
     """
     cm = confusion_matrix(y_true, y_pred, labels=labels)
     plt.figure(figsize=(6, 4))
@@ -123,11 +122,11 @@ def plot_confusion_matrix(y_true, y_pred, labels=None):
 
 def plot_roc_curve(y_true, y_score):
     """
-    绘制ROC曲线并计算AUC。
+    Plot the ROC curve and compute the AUC.
     
-    参数:
-    - y_true: 实际标签
-    - y_score: 预测得分或概率
+    Parameters:
+    - y_true: Actual labels
+    - y_score: Predicted scores or probabilities
     """
     fpr, tpr, thresholds = roc_curve(y_true, y_score)
     roc_auc = auc(fpr, tpr)
@@ -145,11 +144,11 @@ def plot_roc_curve(y_true, y_score):
 
 def plot_feature_importance(model, feature_names):
     """
-    绘制特征重要性图，适用于树模型（如随机森林、XGBoost等）。
+    Plot feature importance, applicable to tree models (e.g., Random Forest, XGBoost).
     
-    参数:
-    - model: 训练好的模型（应具有 `feature_importances_` 属性）
-    - feature_names: 特征名称列表
+    Parameters:
+    - model: Trained model (should have `feature_importances_` attribute)
+    - feature_names: List of feature names
     """
     importance = model.feature_importances_
     sorted_idx = np.argsort(importance)

@@ -8,7 +8,7 @@ class TestModelFunctions(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        # 创建示例数据
+        # Create sample data
         X, y = make_classification(n_samples=100, n_features=10, n_informative=8, n_classes=2, random_state=2024)
         cls.train_df = pd.DataFrame(X, columns=[f'feature_{i}' for i in range(10)])
         cls.train_df['target'] = y
