@@ -13,7 +13,8 @@ from .evaluation import evaluate_model_classification, plot_confusion_matrix, cl
 from .ML_model import model_gs, run_all_models
 
 # 从 boost_model 模块导入
-from .ML_model import AdaBoostModel, CatBoostModel, XGBoostModel, LightGBMModel
+from .boost_model import AdaBoostModel, CatBoostModel, XGBoostModel, LightGBMModel
+
 # 定义 __all__ 使包导入更清晰
 __all__ = [
     # preprocess.py
@@ -41,7 +42,7 @@ __all__ = [
     
     # ML.model.py
     'model_gs',
-    'run_all_models'
+    'run_all_models',
 
     # boost_model.py
     'AdaBoostModel',

@@ -32,7 +32,8 @@ def AdaBoostModel(train_df, val_df, predictors, target, random_state=2024, algor
     # 在验证集上进行预测
     preds = clf.predict(val_df[predictors])
     
-    return preds, clf
+    pass
+    #return preds, clf
 
 
 # %%

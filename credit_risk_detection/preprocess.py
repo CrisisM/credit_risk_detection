@@ -4,6 +4,7 @@ from sklearn.preprocessing import StandardScaler, OneHotEncoder
 from sklearn.impute import SimpleImputer
 from sklearn.compose import ColumnTransformer
 from sklearn.pipeline import Pipeline
+from collections import Counter
 
 def preprocess_data(data, target_column, test_size=0.3, imbalance_threshold=0.1):
     """
