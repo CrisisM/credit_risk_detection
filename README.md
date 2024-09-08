@@ -53,7 +53,7 @@ The following dependencies are required for the package to work:
 These dependencies will be automatically installed when you run the `pip install` command.
 
 ## Usage
-1.Preprocessing the data
+1. Preprocessing the data
 ```python
 from credit_risk_detection import preprocess_data
 
@@ -64,9 +64,9 @@ data = pd.read_csv("credit_card_data.csv")
 X_train, X_test, y_train, y_test = preprocess_data(data, target_column='default')
 ```
 
-2.Model training and evaluation
+2. Model training and evaluation
 
-AdaBoost
+- `AdaBoost`
 ```python
 from credit_risk_detection import AdaBoostModel
 
@@ -78,7 +78,7 @@ from credit_risk_detection import evaluate_model_classification
 evaluate_model_classification(y_test, preds)
 ```
 
-CatBoost
+- `CatBoost`
 ```python
 from credit_risk_detection import CatBoostModel
 
@@ -89,9 +89,9 @@ preds, clf = CatBoostModel(X_train, X_test, predictors, target='default')
 evaluate_model_classification(y_test, preds)
 ```
 
-3.Visualizing model performance
+3. Visualizing model performance
 
-ROC Curve
+- `ROC Curve`
 ```python
 from credit_risk_detection import CatBoostModel
 
@@ -102,7 +102,7 @@ preds, clf = CatBoostModel(X_train, X_test, predictors, target='default')
 evaluate_model_classification(y_test, preds)
 ```
 
-Confusion Matrix
+- `Confusion Matrix`
 ```python
 from credit_risk_detection import CatBoostModel
 
@@ -113,14 +113,15 @@ preds, clf = CatBoostModel(X_train, X_test, predictors, target='default')
 evaluate_model_classification(y_test, preds)
 ```
 
-##Authors
+## Authors
 Wenbo Liu
+
 Jiangao Han
 
-##Acknowledgements
+## Acknowledgements
 Special thanks to the open-source community and libraries that made this project possible.
 
-##Explanation:
+## Explanation:
 
 - **Title and Description**: A short introduction to the project, explaining its purpose and functionality.
 - **Features**: A list of the key features the package offers.
