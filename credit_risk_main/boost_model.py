@@ -1,38 +1,4 @@
 # %%
-from sklearn.ensemble import RandomForestClassifier
-def RandomForrestClassifier(train_df, val_df, predictors, target, n_jobs=-1, random_state=2024, criterion='gini', n_estimators=100, verbose=False):
-    """
-    封装的随机森林分类器训练和预测函数。
-
-    参数:
-    - train_df: 训练数据集的 DataFrame。
-    - val_df: 验证数据集的 DataFrame。
-    - predictors: 特征列的名称列表。
-    - target: 目标列的名称。
-    - n_jobs: 并行工作的 CPU 核心数（默认是使用所有可用核心）。
-    - random_state: 随机数种子，确保结果的可重复性。
-    - criterion: 切分质量的评估标准（'gini' 或 'entropy'）。
-    - n_estimators: 随机森林中的决策树数量。
-    - verbose: 是否在训练时输出详细信息。
-
-    返回:
-    - preds: 验证集上的预测结果。
-    - clf: 训练好的随机森林模型。
-    """
-    
-    # 初始化随机森林模型
-    clf = RandomForestClassifier(n_jobs=n_jobs, random_state=random_state, criterion=criterion, n_estimators=n_estimators, verbose=verbose)
-    
-    # 训练模型
-    clf.fit(train_df[predictors], train_df[target].values)
-    
-    # 在验证集上进行预测
-    preds = clf.predict(val_df[predictors])
-    
-    return preds, clf
-
-
-# %%
 from sklearn.ensemble import AdaBoostClassifier
 
 def AdaBoostModel(train_df, val_df, predictors, target, random_state=2024, algorithm='SAMME.R', learning_rate=0.8, n_estimators=100):
